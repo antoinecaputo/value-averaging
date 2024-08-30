@@ -45,44 +45,45 @@ export default function InvestReport({
   );
 
   return (
-    <div className="flex flex-col justify-center gap-4">
+    <div className=" flex-col justify-center gap-8 min-w-100 max-w-100">
       {title && <h2 className="text-2xl font-bold">{title}</h2>}
 
-      <p>Wallet Value: {formatCurrency(walletValue)}</p>
-      <p>Invested: {formatCurrency(invested)}</p>
+      <p className="my-1">Wallet Value: {formatCurrency(walletValue)}</p>
 
-      <div className="flex gap-1">
+      <p className="my-1">Invested: {formatCurrency(invested)}</p>
+
+      <div className="flex gap-1 my-1">
         <p> Profit: </p>
         <p className={profit > 0 ? "dark:text-green-400" : "dark:text-red-400"}>
           {formatCurrency(profit)}%
         </p>
       </div>
 
-      <div className="flex gap-1">
+      <div className="flex gap-1 my-1">
         <p> Performance: </p>
         <p className={performance > 0 ? "text-green-400" : "text-red-400"}>
           {performance}%
         </p>
       </div>
 
-      <p>Shares: {shares}</p>
+      <p className="my-1">Shares: {shares}</p>
 
-      <p>Price per Share: {formatCurrency(pricePerShare)}</p>
+      <p className="my-1">Price per Share: {formatCurrency(pricePerShare)}</p>
 
-      <div className="flex gap-1">
+      <div className="flex gap-1 my-1">
         <p>Buy transactions: </p>
         <p className="text-green-400">
           {transactions.filter((t) => t.shares > 0).length}
         </p>
       </div>
-      <div className="flex gap-1">
+      <div className="flex gap-1 my-1">
         <p>Sell transactions:</p>
         <p className="text-red-400">
           {transactions.filter((t) => t.shares < 0).length}
         </p>
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 mt-4">
         {transactions.map((transaction, index) => (
           <>
             <div className="border-b border-gray-100 opacity-30"></div>

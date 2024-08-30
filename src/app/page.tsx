@@ -57,31 +57,26 @@ export default function Home() {
       <p className="text-center">
         {error && `${error.message}`}
 
-        {!error && !data && "Loading..."}
-      </p>
+      <p className="text-center">{error && `${error.message}`}</p>
 
-      <div className="flex flex-row gap-8 z-10 max-w-5xl w-full items-center font-mono text-sm py-8">
-        {data?.dva && (
-          <InvestReport
-            title="DVA"
-            walletValue={data.dva.walletValue}
-            invested={data.dva.invested}
-            shares={data.dva.shares}
-            performance={data.dva.performance}
-            transactions={data.dva.transactions}
-          />
-        )}
+      <div className="flex flex-row gap-8 z-10 max-w-5xl w-full font-mono text-sm py-8">
+        <InvestReport
+          title="DVA"
+          walletValue={data?.dva?.walletValue}
+          invested={data?.dva?.invested}
+          shares={data?.dva?.shares}
+          performance={data?.dva?.performance}
+          transactions={data?.dva?.transactions}
+        />
 
-        {data?.dca && (
-          <InvestReport
-            title="DCA"
-            walletValue={data.dca.walletValue}
-            invested={data.dca.invested}
-            shares={data.dva.shares}
-            performance={data.dca.performance}
-            transactions={data.dca.transactions}
-          />
-        )}
+        <InvestReport
+          title="DCA"
+          walletValue={data?.dca?.walletValue}
+          invested={data?.dca?.invested}
+          shares={data?.dca?.shares}
+          performance={data?.dca?.performance}
+          transactions={data?.dca?.transactions}
+        />
       </div>
     </main>
   );
