@@ -126,14 +126,45 @@ export default function Home() {
         </div>
       </div>
 
-      <button
-        className="my-2 py-1 w-36 bg-blue-600 hover:bg-blue-700 text-white rounded"
-        onClick={fetchData}
-      >
-        Calculate
-      </button>
+      <div className="flex flex-col gap-2 my-4">
+        <button
+          className="py-1 w-36 bg-blue-600 hover:bg-blue-700 text-white rounded"
+          onClick={fetchData}
+        >
+          Calculate
+        </button>
+      </div>
 
       <p className="text-red-500">{error && `${error.message}`}</p>
+
+      <div className="border-t-2 border-gray-600 my-8"></div>
+
+      {!data && (
+        <div className="z-10 max-w-5xl w-full font-mono text-sm">
+          <p>
+            This tool compares the performance of DVA and DCA investment
+            strategies over a given period of time. You can adjust the
+            investment amount, frequency, and period to see how each strategy
+            performs under different conditions.
+          </p>
+
+          <h2 className="pt-4 pb-1 text-xl">What is DVA?</h2>
+          <p>
+            Dollar Value Averaging (DVA) is an investment strategy that involves
+            investing a fixed amount of money at regular intervals. The idea is
+            to buy more shares when prices are low and fewer shares when prices
+            are high.
+          </p>
+
+          <h2 className="pt-4 pb-1 text-xl">What is DCA?</h2>
+          <p>
+            Dollar Cost Averaging (DCA) is an investment strategy that involves
+            investing a fixed amount of money at regular intervals. The idea is
+            to buy more shares when prices are low and fewer shares when prices
+            are high.
+          </p>
+        </div>
+      )}
 
       <div className="flex flex-row gap-8 z-10 max-w-5xl w-full font-mono text-sm py-8">
         {data?.dva && (
