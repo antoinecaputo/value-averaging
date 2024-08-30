@@ -1,9 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useMemo, useState } from "react";
 import InvestReport from "@/components/InvestReport";
-import { fetcher } from "@/services/utils";
-import useSWR from "swr";
 
 export default function Home() {
   const [investmentParameters, setInvestmentParameters] = useState({
@@ -14,35 +12,32 @@ export default function Home() {
     start: null,
   });
 
+  const urlParams = useMemo(
+    () =>
+      `investment=${investmentParameters.investment}` +
+      `&investmentFrequency=${investmentParameters.investmentFrequency}` +
+      `&investmentPeriod=${investmentParameters.investmentPeriod}` +
+      `&index=${investmentParameters.index}` +
+      `&start=${investmentParameters.start?.getTime() || ""}`,
+    [investmentParameters],
+  );
+
   /**
    * @returns {{walletValue: number, invested: number, performance: number, transactions: {date: string, price: number, shares: number}[]}}
    */
-  const { data, error, mutate } = useSWR(
-    ["/api/invest", investmentParameters],
-    ([url, investmentParameters]) =>
-      fetcher(
-        `${url}?investment=${investmentParameters.investment}` +
-          `&investmentFrequency=${investmentParameters.investmentFrequency}` +
-          `&investmentPeriod=${investmentParameters.investmentPeriod}` +
-          `&index=${investmentParameters.index}` +
-          `&start=${investmentParameters.start?.getTime() || ""}`,
-      ),
-  );
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    if (error) {
-      console.error(error);
+  const fetchData = useCallback(async () => {
+    try {
+      const response = await fetch(`/api/invest?${urlParams}`);
+      const data = await response.json();
+      setData(data);
+    } catch (e) {
+      console.error(e);
+      setError(e as any);
     }
-  }, [error]);
-
-  useEffect(() => {
-    if (data) {
-      setInvestmentParameters((prev) => ({
-        ...prev,
-        start: new Date(data.dva.transactions[0].date),
-      }));
-    }
-  }, [data]);
+  }, [urlParams]);
 
   return (
     <main className="flex min-h-screen flex-col  p-24">
@@ -119,11 +114,7 @@ export default function Home() {
           <p>Start Date:</p>
           <input
             className="text-black"
-            value={
-              investmentParameters.start
-                ? investmentParameters.start.toISOString().split("T")[0]
-                : ""
-            }
+            value={data ? data.dva.transactions[0].date.split("T")[0] : ""}
             onChange={(e) =>
               setInvestmentParameters({
                 ...investmentParameters,
@@ -135,26 +126,37 @@ export default function Home() {
         </div>
       </div>
 
+      <button
+        className="my-2 py-1 w-36 bg-blue-600 hover:bg-blue-700 text-white rounded"
+        onClick={fetchData}
+      >
+        Calculate
+      </button>
+
       <p className="text-center">{error && `${error.message}`}</p>
 
       <div className="flex flex-row gap-8 z-10 max-w-5xl w-full font-mono text-sm py-8">
-        <InvestReport
-          title="DVA"
-          walletValue={data?.dva?.walletValue}
-          invested={data?.dva?.invested}
-          shares={data?.dva?.shares}
-          performance={data?.dva?.performance}
-          transactions={data?.dva?.transactions}
-        />
+        {data?.dva && (
+          <InvestReport
+            title="DVA"
+            walletValue={data?.dva?.walletValue}
+            invested={data?.dva?.invested}
+            shares={data?.dva?.shares}
+            performance={data?.dva?.performance}
+            transactions={data?.dva?.transactions}
+          />
+        )}
 
-        <InvestReport
-          title="DCA"
-          walletValue={data?.dca?.walletValue}
-          invested={data?.dca?.invested}
-          shares={data?.dca?.shares}
-          performance={data?.dca?.performance}
-          transactions={data?.dca?.transactions}
-        />
+        {data?.dca && (
+          <InvestReport
+            title="DCA"
+            walletValue={data?.dca?.walletValue}
+            invested={data?.dca?.invested}
+            shares={data?.dca?.shares}
+            performance={data?.dca?.performance}
+            transactions={data?.dca?.transactions}
+          />
+        )}
       </div>
     </main>
   );
