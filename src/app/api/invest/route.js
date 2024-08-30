@@ -8,12 +8,12 @@ export async function GET(request) {
     "investmentFrequency",
   );
   const investmentPeriod = request.nextUrl.searchParams.get("investmentPeriod");
+  const index = request.nextUrl.searchParams.get("index");
+  const start = request.nextUrl.searchParams.get("start");
 
-  if (!investment || !investmentFrequency || !investmentPeriod) {
+  if (!investment || !investmentFrequency || !investmentPeriod || !index) {
     return Response.json({ message: "Bad request" }, { status: 400 });
   }
-
-  const index = "NASDAQ_100";
 
   try {
     const dva = dvaInvest({
@@ -21,6 +21,7 @@ export async function GET(request) {
       investmentFrequency: Number(investmentFrequency),
       investmentPeriod: Number(investmentPeriod),
       index,
+      startDate: start ? new Date(Number(start)) : null,
     });
 
     const dca = dcaInvest({
@@ -28,6 +29,7 @@ export async function GET(request) {
       investmentFrequency: Number(investmentFrequency),
       investmentPeriod: Number(investmentPeriod),
       index,
+      startDate: start ? new Date(Number(start)) : null,
     });
 
     return Response.json({

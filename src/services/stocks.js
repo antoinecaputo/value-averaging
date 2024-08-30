@@ -5,9 +5,10 @@ export function runPeriodInvestment({
   investmentFrequency = 30,
   investmentPeriod = 12,
   index = "NASDAQ_100",
+  startDate = null,
   periodInvestment = ({ stock, wallet, parameters }) => {},
 }) {
-  const stocks = parseStocks(index);
+  const stocks = parseStocks(index, startDate);
   if (!stocks.length) {
     throw new Error("No stocks found");
   }

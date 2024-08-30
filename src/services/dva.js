@@ -5,12 +5,14 @@ export function dvaInvest({
   investmentFrequency = 30,
   investmentPeriod = 12,
   index = "NASDAQ_100",
+  startDate = null,
 }) {
   const report = runPeriodInvestment({
     investment,
     investmentFrequency,
     investmentPeriod,
     index,
+    startDate,
     periodInvestment,
   });
 
