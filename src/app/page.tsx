@@ -133,7 +133,7 @@ export default function Home() {
         Calculate
       </button>
 
-      <p className="text-center">{error && `${error.message}`}</p>
+      <p className="text-red-500">{error && `${error.message}`}</p>
 
       <div className="flex flex-row gap-8 z-10 max-w-5xl w-full font-mono text-sm py-8">
         {data?.dva && (
