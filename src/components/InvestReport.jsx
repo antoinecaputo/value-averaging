@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { formatCurrency } from "@/services/utils";
 
 export default function InvestReport({
@@ -11,6 +11,11 @@ export default function InvestReport({
   performance = 0,
   transactions = [],
 }) {
+  const [isSaved, setIsSaved] = useState(false);
+  useEffect(() => {
+    setIsSaved(false);
+  }, [shares, walletValue, invested, performance, transactions]);
+
   const profit = useMemo(() => walletValue - invested, [walletValue, invested]);
 
   const pricePerShare = useMemo(() => {
@@ -46,7 +51,18 @@ export default function InvestReport({
 
   return (
     <div className=" flex-col justify-center gap-8 min-w-100 max-w-100">
-      {title && <h2 className="text-2xl font-bold">{title}</h2>}
+      <div className="flex justify-between">
+        {title && <h2 className="text-2xl font-bold">{title}</h2>}
+        <button
+          className="disabled:bg-gray-800 hover:bg-gray-800 text-white text-xs py-0.5 px-2 rounded"
+          disabled={isSaved === true}
+          onClick={() => {
+            setIsSaved(true);
+          }}
+        >
+          Save
+        </button>
+      </div>
 
       <p className="my-1">Wallet Value: {formatCurrency(walletValue)}</p>
 
