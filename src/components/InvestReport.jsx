@@ -60,7 +60,7 @@ export default function InvestReport({
             setIsSaved(true);
           }}
         >
-          Save
+          {isSaved ? "Saved" : "Save"}
         </button>
       </div>
 
@@ -108,11 +108,11 @@ export default function InvestReport({
               {`${new Date(transaction.date).toLocaleDateString("fr-FR")} - ${formatCurrency(walletValueBeforeTransaction(index))}`}
             </p>
 
-            <p
-              className={`flex gap-1 ${transaction.shares > 0 ? "text-green-400" : "text-red-400"}`}
-            >{`${transaction.shares.toFixed(2)} at ${transaction.price}$`}</p>
+            <p className="flex gap-1">
+              {`${transaction.shares > 0 ? "Buy" : "Sell"} ${transaction.shares.toFixed(2)} at ${transaction.price}$`}</p>
 
-            <p>{formatCurrency(transaction.shares * transaction.price)}</p>
+            <p className={`flex gap-1 ${transaction.shares > 0 ? "text-green-400" : "text-red-400"}`}>
+              {formatCurrency(transaction.shares * transaction.price)}</p>
           </>
         ))}
       </div>
